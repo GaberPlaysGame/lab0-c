@@ -42,7 +42,7 @@ bool q_insert_head(struct list_head *head, char *s)
     if (!new)
         return false;  // if malloc() failed
     size_t len_s = strlen(s) + 1;
-    new->value = (char *) malloc(len_s);
+    new->value = (char *) malloc(len_s * sizeof(char));
     if (!new->value) {
         free(new);
         return false;  // if malloc() failed, free new and return false
@@ -66,7 +66,7 @@ bool q_insert_tail(struct list_head *head, char *s)
     if (!new)
         return false;  // if malloc() failed
     size_t len_s = strlen(s) + 1;
-    new->value = (char *) malloc(len_s);
+    new->value = (char *) malloc(len_s * sizeof(char));
     if (!new->value) {
         free(new);
         return false;  // if malloc() failed, free new and return false
@@ -157,6 +157,24 @@ bool q_delete_mid(struct list_head *head)
 bool q_delete_dup(struct list_head *head)
 {
     // https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/
+    if (!head)
+        return false;  // list is NULL
+
+    element_t *cur, *next;
+    bool flag = false;
+    list_for_each_entry_safe (cur, next, head, list) {
+        int cmp = &next->list != head
+                      ? strcmp(cur->value, next->value)
+                      : true;  // no comparison if next is head,
+                               // comparison gives 0 or nonzero value
+        if (cmp && !flag)
+            continue;
+
+        list_del(&cur->list);
+        q_release_element(cur);
+        flag = !cmp;
+    }
+
     return true;
 }
 
@@ -176,7 +194,11 @@ void q_reverseK(struct list_head *head, int k)
 }
 
 /* Sort elements of queue in ascending order */
-void q_sort(struct list_head *head) {}
+void q_sort(struct list_head *head)
+{
+    if (!head || list_empty(head))
+        return;
+}
 
 /* Remove every node which has a node with a strictly greater value anywhere to
  * the right side of it */
