@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "list_sort.h"
 #include "queue.h"
 #include "report.h"
 
@@ -382,3 +383,4 @@ int q_merge(struct list_head *head)
     head->prev = start;
     return q_size(head);
 }
+
