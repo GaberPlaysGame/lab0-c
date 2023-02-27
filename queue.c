@@ -94,9 +94,8 @@ element_t *q_remove_head(struct list_head *head, char *sp, size_t bufsize)
     list_del(&remove->list);  // an element in list is removed
 
     if (sp && bufsize) {  // sp != NULL and bufsize != 0
-        memcpy(sp, remove->value,
-               bufsize > strlen(remove->value) + 1 ? strlen(remove->value) + 1
-                                                   : bufsize);
+        int len = strlen(remove->value) + 1;
+        memcpy(sp, remove->value, bufsize > len ? len + 1 : bufsize);
         sp[bufsize - 1] = '\0';
     }
 
@@ -112,9 +111,8 @@ element_t *q_remove_tail(struct list_head *head, char *sp, size_t bufsize)
     list_del(&remove->list);  // an element in list is removed
 
     if (sp && bufsize) {  // sp != NULL and bufsize != 0
-        memcpy(sp, remove->value,
-               bufsize > strlen(remove->value) + 1 ? strlen(remove->value) + 1
-                                                   : bufsize);
+        int len = strlen(remove->value) + 1;
+        memcpy(sp, remove->value, bufsize > len ? len + 1 : bufsize);
         sp[bufsize - 1] = '\0';
     }
 
